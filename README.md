@@ -16,7 +16,7 @@
 - Greedy
     - If this were Google Maps, we would always choose the lowest weight so far. Even though this may be the "fastest" road or the road least congested by traffic, it may be going in the wrong direction, and we would continue going in that direction until a shorter path is found.
 ```
-dijkstra()
+function dijkstra()
   dist = {}
   prev = {}
 
@@ -31,8 +31,8 @@ dijkstra()
   while (Q not empty)
     u = remove vertex with lowest dist from Q
 
-    for (each edge(u, v))
-      if (dist[v] > dist[u] + weight)
+    for (each edge(u: [v, weight]))
+      if (dist[v] > dist[u] + weight)  // greedy
         dist[v] = dist[u] + weight
         prev[v] = u
 
@@ -46,7 +46,7 @@ dijkstra()
 - Heuristic instead of greedy
     - Manhattan distance = # cells horizontal + # cells vertical to target (incl. obstacles)
 ```
-aStar()
+function aStar()
   open = []
   closed = []
 
@@ -55,7 +55,7 @@ aStar()
   while (open not empty)
     current = node with lowest F in open
 
-    drop current from open and add current to closed
+    drop current from open and add it to closed
 
     if (current is target)
       return  // draw path from target.parent to start
@@ -81,6 +81,24 @@ aStar()
 - Works with negative edge weights
 - Can also detect negative cycles
     - If we just wanted to know if graph has a cycle, we can use DAG topological sort instead
+```
+function bellmanFord()
+  dist = {}
+  prev = {}
+  
+  for (each vertex)
+    if (start vertex)
+      dist[start vertex] = 0
+    else
+      dist[other vertex] = +INF
+  
+  loop (|V|-1)  // this is main difference from Dijkstra
+    for (each edge(u: [v, weight]))
+      dist[v] = Math.min(dist[v], dist[u] + weight)  // update every edge
+      prev[v] = u
+
+  return dist
+```
 
 ## Floyd-Warshall: O(|V|^3)
 
