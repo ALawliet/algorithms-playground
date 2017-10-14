@@ -21,7 +21,34 @@
 [codepen](https://codepen.io/ALawliet/pen/JrZVMR)
 - Shortest path from S to T
 - Heuristic instead of greedy
-    - Manhattan distance = # cells horizontal + # cells vertical (including obstacles)
+    - Manhattan distance = # cells horizontal + # cells vertical to target (incl. obstacles)
+```
+aStar()
+  open = []
+  closed = []
+
+  add start to open
+  
+  while (open not empty)
+    current = node with lowest F in open
+
+    drop current from open and add current to closed
+
+    if (current is target)
+      return  // draw path by target.parent to start
+
+    for (each neighbor)
+      if (neighbor not traversible or neighbor in closed)
+        continue
+    
+      if ((neighbor.F < current.F) || neighbor not in open)
+        neighbor.parent = current
+        neighbor.H = # cells horizontal + # cells vertical to target (incl. obstacles)
+        neighbor.G = neighbor is diagonal ? 14 : 10
+        neighbor.F = neighbor.G + neighbor.H
+        if (neighbor not in open)
+          add neighbor to open
+ ```
 
 ## Bellman-Ford: O(|V|*|E|)
 
