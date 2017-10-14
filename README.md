@@ -15,6 +15,29 @@
 - Shortest path from ONE node to ALL other nodes (SSSP)
 - Greedy
     - If this were Google Maps, we would always choose the lowest weight so far. Even though this may be the "fastest" road or the road least congested by traffic, it may be going in the wrong direction, and we would continue going in that direction until a shorter path is found.
+```
+dijkstra()
+  dist = {}
+  prev = {}
+
+  for (each vertex)
+    if (start vertex)
+      dist[start vertex] = 0
+    else
+      dist[other vertex] = +INF
+
+  Q = [all vertices]
+
+  while (Q not empty)
+    u = remove vertex with lowest dist from Q
+
+    for (each edge(u, v))
+      if (dist[v] > dist[u] + weight)
+        dist[v] = dist[u] + weight
+        prev[v] = u
+
+  return dist
+````
 
 ## A*: O(|E|) = O(b^d)
 
@@ -35,13 +58,13 @@ aStar()
     drop current from open and add current to closed
 
     if (current is target)
-      return  // draw path by target.parent to start
+      return  // draw path from target.parent to start
 
     for (each neighbor)
       if (neighbor not traversible or neighbor in closed)
         continue
     
-      if ((neighbor.F < current.F) || neighbor not in open)
+      if ((neighbor.F < current.F) or neighbor not in open)
         neighbor.parent = current
         neighbor.H = # cells horizontal + # cells vertical to target (incl. obstacles)
         neighbor.G = neighbor is diagonal ? 14 : 10
