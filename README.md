@@ -9,7 +9,7 @@
 
 **Heuristic:** A measure of how close a node is to the target. Used to check that we are actually building a path in the right direction towards that target, unlike the greedy approach. [A*]
 
-## Dijkstra: O(|E|+|V|log|V|)
+## Dijkstra: O(E+VlogV)
 
 [codepen](https://codepen.io/ALawliet/pen/XeBQBW)
 - Shortest path from ONE node to ALL other nodes (SSSP)
@@ -26,23 +26,50 @@ function dijkstra()
     else
       dist[other vertex] = +INF
 
-  Q = [all vertices]
+  Q = [all vertices]  // ideally fibonacci heap for optimal running time
 
   while (Q not empty)
-    u = remove vertex with lowest dist from Q
+    u = remove vertex with lowest dist from Q (extract min)  // greedy
 
     for (each edge(u: [v, weight]))
-      if (dist[v] > dist[u] + weight)  // greedy
+      if (dist[v] > dist[u] + weight)
         dist[v] = dist[u] + weight
         prev[v] = u
 
   return dist
 ````
 
-## A*: O(|E|) = O(b^d)
+## Bellman-Ford: O(VE)
+
+[codepen](https://codepen.io/ALawliet/pen/RLBeyq)
+- Shortest path from ONE node to ALL other nodes (SSSP)
+- DP
+- Works with negative edge weights
+- Can also detect negative cycles
+    - If we just wanted to know if graph has a cycle, we can use DAG topological sort instead
+```
+function bellmanFord()
+  dist = {}
+  prev = {}
+  
+  for (each vertex)
+    if (start vertex)
+      dist[start vertex] = 0
+    else
+      dist[other vertex] = +INF
+  
+  loop (|V|-1)  // this is main difference from Dijkstra
+    for (each edge(u: [v, weight]))
+      dist[v] = Math.min(dist[v], dist[u] + weight)  // update every edge
+      prev[v] = u
+
+  return dist
+```
+
+## A*: O(E) = O(b^d)
 
 [codepen](https://codepen.io/ALawliet/pen/JrZVMR)
-- Shortest path from S to T
+- Shortest path from ONE node to SINGLE TARGET node (STSP)
 - Heuristic instead of greedy
     - Manhattan distance = # cells horizontal + # cells vertical to target (incl. obstacles)
 ```
@@ -73,33 +100,6 @@ function aStar()
           add neighbor to open
  ```
 
-## Bellman-Ford: O(|V|*|E|)
-
-[codepen](https://codepen.io/ALawliet/pen/RLBeyq)
-- Shortest path from ONE node to ALL other nodes (SSSP)
-- DP
-- Works with negative edge weights
-- Can also detect negative cycles
-    - If we just wanted to know if graph has a cycle, we can use DAG topological sort instead
-```
-function bellmanFord()
-  dist = {}
-  prev = {}
-  
-  for (each vertex)
-    if (start vertex)
-      dist[start vertex] = 0
-    else
-      dist[other vertex] = +INF
-  
-  loop (|V|-1)  // this is main difference from Dijkstra
-    for (each edge(u: [v, weight]))
-      dist[v] = Math.min(dist[v], dist[u] + weight)  // update every edge
-      prev[v] = u
-
-  return dist
-```
-
-## Floyd-Warshall: O(|V|^3)
+## Floyd-Warshall: O(V^3)
 
 - Shortest path from ALL PAIRS of nodes (APSP)
